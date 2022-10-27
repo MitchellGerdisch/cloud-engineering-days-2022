@@ -1,0 +1,4 @@
+config:
+  aws-ts-wordpress-fargate-rds:dbPassword:
+    secure: AAABAG/5jPL0DpUXNnX4xtsf7+6YEnqz1RKVcEFUi59GF0m3uQ==
+  aws:region: us-east-1

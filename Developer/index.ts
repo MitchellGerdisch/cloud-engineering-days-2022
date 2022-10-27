@@ -1,14 +1,14 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as random from "@pulumi/random";
-import * as backend from "./backend";
-import * as frontend from "./frontend";
-import * as network from "./network";
+import * as aws from "@pulumi/aws";
+import * as awsx from "@pulumi/awsx";
 
 // Get config data
 const config = new pulumi.Config();
-const serviceName = config.get("serviceName") || "wp-fargate-rds";
-const dbName = config.get("dbName") || "wordpress";
 const dbUser = config.get("dbUser") || "admin";
+const engineVersion = config.get("engineVersion") || "5.7";
+const instanceClass = config.get("instanceClass") || "db.t2.micro";
+const storageType = config.get("storageType")  || "gp2";
 
 // Get secretified password from config or create one using the "random" package
 let dbPassword = config.getSecret("dbPassword");
@@ -20,29 +20,62 @@ if (!dbPassword) {
   }).result;
 }
 
-const vpc = new network.Vpc(`${serviceName}-net`, {});
+// Construct a base name for naming convention purposes.
+const baseName= `${pulumi.getProject()}-${pulumi.getStack()}`
 
-const db = new backend.Db(`${serviceName}-db`, {
-  dbName: dbName,
-  dbUser: dbUser,
-  dbPassword: dbPassword,
-  subnetIds: vpc.subnetIds,
-  securityGroupIds: vpc.rdsSecurityGroupIds,
-});
+// Build a VPC and related accoutrements.
+const vpcName = `${baseName}-vpc`
+const vpc = new awsx.ec2.Vpc(vpcName)
 
-const fe = new frontend.WebService(`${serviceName}-fe`, {
-  dbHost: db.dbAddress,
-  dbPort: "3306",
-  dbName: db.dbName,
-  dbUser: db.dbUser,
-  dbPassword: db.dbPassword,
+const rdsSgName = `${baseName}-rds-sg`;
+const rdsSecurityGroup = new aws.ec2.SecurityGroup(rdsSgName, {
   vpcId: vpc.vpcId,
-  subnetIds: vpc.subnetIds,
-  securityGroupIds: vpc.feSecurityGroupIds,
+  description: "Allow client access",
+  tags: { "Name": rdsSgName },
+  ingress: [
+    {
+      cidrBlocks: ["0.0.0.0/0"],
+      fromPort: 3306,
+      toPort: 3306,
+      protocol: "tcp",
+      description: "Allow RDS access",
+    },
+  ],
+  egress: [
+    {
+      protocol: "-1",
+      fromPort: 0,
+      toPort: 0,
+      cidrBlocks: ["0.0.0.0/0"],
+    },
+  ],
 });
 
-export const webServiceUrl = pulumi.interpolate`http://${fe.dnsName}`;
-export const ecsClusterName = fe.clusterName;
-export const databaseEndpoint = db.dbAddress;
-export const databaseUserName = db.dbUser;
-export const databasePassword = db.dbPassword;
+// Create RDS subnet grup
+const rdsSubnetGroupName = `${baseName}-sng`;
+const rdsSubnetGroup = new aws.rds.SubnetGroup(rdsSubnetGroupName, {
+  subnetIds: vpc.privateSubnetIds,
+  tags: { "Name": rdsSubnetGroupName},
+});
+
+// RDS DB
+const rdsName = `${baseName}-rds`.split("-").join("");
+const db = new aws.rds.Instance(rdsName, {
+  dbName: rdsName,
+  username: dbUser,
+  password: dbPassword,
+  vpcSecurityGroupIds: [rdsSecurityGroup.id],
+  dbSubnetGroupName: rdsSubnetGroup.name,
+  allocatedStorage: 20,
+  engine: "mysql",
+  engineVersion: engineVersion,
+  instanceClass: instanceClass,
+  storageType: storageType,
+  skipFinalSnapshot: true,
+  publiclyAccessible: false,
+});
+
+export const databaseAddress = db.address;
+export const databaseName = db.dbName;
+export const databaseUser = db.username;
+export const databasePassword = db.password;
