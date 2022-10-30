@@ -15,7 +15,7 @@ export interface WebServiceArgs {
   securityGroupIds: pulumi.Output<string>[];
 }
 
-// Creates DB
+// Creates Frontend Webservice
 export class WebService extends pulumi.ComponentResource {
   public readonly dnsName: pulumi.Output<string>;
   public readonly clusterName: pulumi.Output<string>;
@@ -23,15 +23,6 @@ export class WebService extends pulumi.ComponentResource {
   constructor(name: string, args: WebServiceArgs, opts?: pulumi.ComponentResourceOptions) {
 
     super("custom:resource:WebService", name, args, opts);
-
-    // Create ECS cluster to run a container-based service
-    const cluster = new aws.ecs.Cluster(`${name}-ecs`, {}, { parent: this });
-
-    // Create load balancer to listen for HTTP traffic
-    const alb = new aws.lb.LoadBalancer(`${name}-alb`, {
-      securityGroups: args.securityGroupIds,
-      subnets: args.subnetIds,
-    }, { parent: this });
 
     const atg = new aws.lb.TargetGroup(`${name}-app-tg`, {
       port: 80,
@@ -137,9 +128,6 @@ export class WebService extends pulumi.ComponentResource {
           containerPort: 80,
       }],
     }, { dependsOn: [wl], parent: this});
-
-    this.dnsName = alb.dnsName;
-    this.clusterName = cluster.name;
 
     this.registerOutputs({});
   }

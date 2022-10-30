@@ -4,9 +4,11 @@ import * as backend from "./backend";
 import * as frontend from "./frontend";
 import * as network from "./network";
 
+// Build a base name for naming conventions
+const baseName= `${pulumi.getProject()}-${pulumi.getStack()}`
+
 // Get config data
 const config = new pulumi.Config();
-const serviceName = config.get("serviceName") || "wp-fargate-rds";
 const dbName = config.get("dbName") || "wordpress";
 const dbUser = config.get("dbUser") || "admin";
 
@@ -20,9 +22,9 @@ if (!dbPassword) {
   }).result;
 }
 
-const vpc = new network.Vpc(`${serviceName}-net`, {});
+const vpc = new network.Vpc(`${baseName}-net`, {});
 
-const db = new backend.Db(`${serviceName}-db`, {
+const db = new backend.Db(`${baseName}-db`, {
   dbName: dbName,
   dbUser: dbUser,
   dbPassword: dbPassword,
@@ -30,7 +32,7 @@ const db = new backend.Db(`${serviceName}-db`, {
   securityGroupIds: vpc.rdsSecurityGroupIds,
 });
 
-const fe = new frontend.FrontendInfra(`${serviceName}-fe`, {
+const fe = new frontend.FrontendInfra(`${baseName}-fe`, {
   vpcId: vpc.vpcId,
   subnetIds: vpc.subnetIds,
   securityGroupIds: vpc.feSecurityGroupIds,
@@ -39,6 +41,6 @@ const fe = new frontend.FrontendInfra(`${serviceName}-fe`, {
 export const webServiceUrl = pulumi.interpolate`http://${fe.dnsName}`;
 export const ecsClusterName = fe.clusterName;
 export const alb = fe.albArn;
-export const databaseEndpoint = db.dbAddress;
+export const databaseAddress = db.dbAddress;
 export const databaseUserName = db.dbUser;
 export const databasePassword = db.dbPassword;

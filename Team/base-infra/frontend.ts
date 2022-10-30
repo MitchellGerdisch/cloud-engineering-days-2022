@@ -4,19 +4,19 @@ import * as aws from "@pulumi/aws";
 import * as pulumi from "@pulumi/pulumi";
 
 // Interface for backend args
-export interface WebServiceArgs {
+export interface FrontendInfraArgs{
   vpcId: pulumi.Output<string>;
   subnetIds: pulumi.Output<string>[];
   securityGroupIds: pulumi.Output<string>[];
 }
 
-// Creates DB
+// Creates frontend base infrastructure
 export class FrontendInfra extends pulumi.ComponentResource {
   public readonly dnsName: pulumi.Output<string>;
   public readonly albArn: pulumi.Output<string>;
   public readonly clusterName: pulumi.Output<string>;
 
-  constructor(name: string, args: WebServiceArgs, opts?: pulumi.ComponentResourceOptions) {
+  constructor(name: string, args: FrontendInfraArgs, opts?: pulumi.ComponentResourceOptions) {
 
     super("custom:resource:FrontendInfra", name, args, opts);
 
