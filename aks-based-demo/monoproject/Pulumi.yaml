@@ -1,0 +1,6 @@
+name: py-azure-aks-cosmosdb
+description: Pulumi mono project to deploy AKS and Cosmos DB for Azure Workshop
+runtime:
+    name: python
+    options:
+        virtualenv: venv

@@ -1,0 +1,3 @@
+config:
+  azure-native:location: CentralUS
+  py-azure-aks-cosmosdb:nodeSize: Standard_DS2_v2
