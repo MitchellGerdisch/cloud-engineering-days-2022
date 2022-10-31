@@ -10,7 +10,7 @@ export interface DbArgs {
   dbPassword: pulumi.Output<string>;
   subnetIds: pulumi.Output<string>[];
   securityGroupIds: pulumi.Output<string>[];
-}
+
 
 // Creates DB
 export class Db extends pulumi.ComponentResource {
