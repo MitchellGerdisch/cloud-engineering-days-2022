@@ -1,6 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 
-import { Frontend } from "../components/frontend"
+import { Frontend } from "../components/frontend";
 
 const org = pulumi.getOrganization();
 const project = pulumi.getProject();

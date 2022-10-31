@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
-import { nameBase } from "./config";
+import { nameBase, tagAllResources } from "./config";
 import { dbUser, dbPassword, dbEngine, dbEngineVersion, dbInstanceClass, dbStorageType, dbApplyImmediately, dbMultiAz, dbSkipFinalSnapshot } from "./config-db";
 
 // Build a VPC and related accoutrements using Pulumi-provided AWSX package.

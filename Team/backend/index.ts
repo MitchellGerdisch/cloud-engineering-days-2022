@@ -1,12 +1,11 @@
 import * as pulumi from "@pulumi/pulumi";
 
 import { Backend } from "../components/backend";
-import { Bus } from "../components/bus"
+import { Bus } from "../components/bus";
 
-const stack = pulumi.getStack();
 const config = new pulumi.Config();
-const nameBase = config.get("nameBase") ?? `${pulumi.getProject()}-${pulumi.getStack()}`;
 const appName = config.require("appName"); 
+const nameBase = config.get("nameBase") ?? `${pulumi.getProject()}-${pulumi.getStack()}`;
 
 const backend = new Backend(nameBase)
 
