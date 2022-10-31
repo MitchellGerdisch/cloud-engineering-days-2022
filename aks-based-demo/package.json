@@ -1,0 +1,14 @@
+{
+    "name": "ced-organization-demo",
+    "main": "index.ts",
+    "devDependencies": {
+        "@types/node": "^14"
+    },
+    "dependencies": {
+        "@pulumi/azure-native": "^1.0.0",
+        "@pulumi/azuread": "^5.30.0",
+        "@pulumi/kubernetes": "^3.22.1",
+        "@pulumi/pulumi": "^3.0.0",
+        "@pulumi/tls": "^4.6.1"
+    }
+}

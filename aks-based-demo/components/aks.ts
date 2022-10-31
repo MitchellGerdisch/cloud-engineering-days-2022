@@ -1,19 +1,15 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as azuread from "@pulumi/azuread";
-import * as random from "@pulumi/random";
 import * as tls from "@pulumi/tls";
-
 import * as containerservice from "@pulumi/azure-native/containerservice";
-import * as resources from "@pulumi/azure-native/resources";
 
 
 export interface AksClusterArgs {
-  rgName: string;
+  rgName: pulumi.Input<string>;
   clusterNodeCount: number;
   clusterK8sVersion: string;
   clusterNodeSize: string;
   adminUsername: string;
-  sshPublicKey: string;
 }
 
 export class AksCluster extends pulumi.ComponentResource {
@@ -25,11 +21,14 @@ export class AksCluster extends pulumi.ComponentResource {
 
     // Create an AD service principal
     const adAppName = `${name}-aks-app`;
+    const current = azuread.getClientConfig();
     const adApp = new azuread.Application(adAppName, {
         displayName: adAppName,
+        owners: [current.then(current => current.objectId)],
     }, {parent: this});
     const adSp = new azuread.ServicePrincipal(`${name}-aks-sp`, {
         applicationId: adApp.applicationId,
+        owners: [current.then(current => current.objectId)],
     }, {parent: this});
 
     // Create the Service Principal Password
