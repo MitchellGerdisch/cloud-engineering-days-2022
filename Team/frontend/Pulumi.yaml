@@ -1,0 +1,3 @@
+name: ced-team-frontend
+runtime: nodejs
+description: Deploys frontend processor that passes data to eventbridge bus.

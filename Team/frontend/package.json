@@ -1,0 +1,9 @@
+{
+    "name": "lambda-eventbridge-dyndb",
+    "devDependencies": {
+        "@types/node": "^10.17.51"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "^3.45.0"
+    }
+}

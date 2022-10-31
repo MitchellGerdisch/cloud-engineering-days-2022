@@ -1,0 +1,3 @@
+name: ced-team-backend
+runtime: nodejs
+description: Deploys eventbridge bus and DynamoDb

@@ -1,0 +1,5 @@
+config:
+  aws:region: us-east-1
+  ced-developer-demo:dbInstanceClass: db.m6i.large
+  ced-developer-demo:dbMultiAz: "true"
+  ced-developer-demo:dbSkipFinalSnapshot: "false"
