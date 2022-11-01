@@ -1,4 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
+import * as pulumiService from "@pulumi/pulumiService";
 import * as aws from "@pulumi/aws";
 import * as k8s from "@pulumi/kubernetes";
 import { ServiceDeployment, ServiceDeploymentArgs } from "@pulumi/k8s-servicedeployment";
@@ -9,8 +10,8 @@ const stack = pulumi.getStack();
 const config = new pulumi.Config();
 const nameBase = config.get("nameBase") ?? `${project}-${stack}`;
 const eksProject = config.require("eksProject");
-const eksProjectStackRef = new pulumi.StackReference(`${org}/${eksProject}/${stack}`);
 
+const eksProjectStackRef = new pulumi.StackReference(`${org}/${eksProject}/${stack}`);
 const kubeconfig = eksProjectStackRef.requireOutput("kubeconfig") 
 const k8sProvider = new k8s.Provider('k8s-provider', {
   kubeconfig: kubeconfig
@@ -41,3 +42,12 @@ const frontend = new ServiceDeployment("frontend", {
 
 export const frontEndUrl = pulumi.interpolate`http://${frontend.frontEndIp}`;
 
+
+// Add Pulumi tag
+const stackTag = new pulumiService.StackTag("stackTag", {
+    organization: pulumi.getOrganization(),
+    project: pulumi.getProject(),
+    stack: pulumi.getStack(),
+    name: "ORGANIZATION",
+    value: "CED"
+  })

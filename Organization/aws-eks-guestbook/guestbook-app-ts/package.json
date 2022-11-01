@@ -8,6 +8,7 @@
 				"@pulumi/k8s-servicedeployment": "file:../../packages/pulumi-k8s-servicedeployment/sdk/nodejs",
 				"@pulumi/kubernetes": "^3.22.1",
 				"@pulumi/pulumi": "^3.0.0",
+				"@pulumi/pulumiservice": "^0.1.8",
 				"typescript": "^4.0.0"
 		}
 }

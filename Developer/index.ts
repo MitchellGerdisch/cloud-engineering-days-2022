@@ -5,7 +5,7 @@ import { nameBase, tagAllResources } from "./config";
 import { dbUser, dbPassword, dbEngine, dbEngineVersion, dbInstanceClass, dbStorageType, dbApplyImmediately, dbMultiAz, dbSkipFinalSnapshot } from "./config-db";
 
 // Build a VPC and related accoutrements using Pulumi-provided AWSX package.
-const vpc = new awsx.ec2.Vpc(`${nameBase}-vpc`)
+const vpc = new awsx.ec2.Vpc(`${nameBase}-vpc`);
 
 // Build RDS Security Group
 const rdsSgName = `${nameBase}-rds-sg`;

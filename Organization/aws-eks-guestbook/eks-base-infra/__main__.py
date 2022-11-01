@@ -3,6 +3,7 @@ import vpc
 import utils
 import pulumi
 from pulumi_aws import eks
+import pulumi_pulumiservice as pulumi_service
 
 ## EKS Cluster
 
@@ -36,3 +37,13 @@ eks_node_group = eks.NodeGroup(
 )
 
 pulumi.export('kubeconfig', pulumi.Output.secret(utils.generate_kube_config(eks_cluster)))
+
+
+# Add a Pulumi Stack Tag
+stack_tag = pulumi_service.StackTag("stack-tag", #pulumi_service.StackTagArgs(
+    organization=pulumi.get_organization(),
+    project=pulumi.get_project(),
+    stack=pulumi.get_stack(),
+    name="ORGANIZATION",
+    value="CED"
+)

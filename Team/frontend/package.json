@@ -4,6 +4,7 @@
         "@types/node": "^10.17.51"
     },
     "dependencies": {
-        "@pulumi/pulumi": "^3.45.0"
+        "@pulumi/pulumi": "^3.45.0",
+        "@pulumi/pulumiservice": "^0.1.8"
     }
 }

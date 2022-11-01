@@ -1,4 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
+import * as pulumiService from "@pulumi/pulumiService"
 
 import { Backend } from "../components/backend";
 import { Bus } from "../components/bus";
@@ -18,3 +19,12 @@ export const busArn = bus.arn;
 const awsConfig = new pulumi.Config("aws");
 const region = awsConfig.require("region");
 export const EventsTableLink = pulumi.interpolate`https://console.aws.amazon.com/dynamodbv2/home?region=${region}#table?name=${backend.eventsTableName}`
+
+// Add Pulumi tag
+const stackTag = new pulumiService.StackTag("stackTag", {
+  organization: pulumi.getOrganization(),
+  project: pulumi.getProject(),
+  stack: pulumi.getStack(),
+  name: "TEAM",
+  value: "CED"
+})

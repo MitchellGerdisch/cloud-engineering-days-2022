@@ -1,4 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
+import * as pulumiService from "@pulumi/pulumiService";
 
 import { Frontend } from "../components/frontend";
 import { tagAllResources } from "../components/tagger";
@@ -10,13 +11,23 @@ const config = new pulumi.Config();
 const nameBase = config.get("nameBase") ?? `${project}-${stack}`;
 const appName = config.require("appName"); 
 const backendProject = config.require("backendProject");
+
 const backendStackRef = new pulumi.StackReference(`${org}/${backendProject}/${stack}`);
 const busArn = backendStackRef.requireOutput("busArn");
 
-tagAllResources({"project": nameBase})
+// tagAllResources({"project": nameBase});
 
 // const frontend = busArn.apply(arn => new Frontend(nameBase, {busArn: arn, appName: appName}));
 const frontend = new Frontend(nameBase, {busArn: busArn, appName: appName});
 
 // The Frontend URL to hit that causes events
 export const apiUrl = frontend.url;
+
+// Add Pulumi tag
+const stackTag = new pulumiService.StackTag("stackTag", {
+  organization: pulumi.getOrganization(),
+  project: pulumi.getProject(),
+  stack: pulumi.getStack(),
+  name: "TEAM",
+  value: "CED"
+})
