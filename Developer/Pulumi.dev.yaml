@@ -2,3 +2,5 @@ config:
   aws:region: us-east-2
   ced-developer-demo:dbApplyImmediately: "true"
   ced-developer-demo:dbMultiAz: "false"
+  ced-developer-demo:dbPassword:
+    secure: AAABAJijovUnjkY9HrIyBlr7PAtEay3xKuWbSNrq7d3ZRESQRj35jwi4gGs=

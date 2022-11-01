@@ -15,7 +15,7 @@ const backendProject = config.require("backendProject");
 const backendStackRef = new pulumi.StackReference(`${org}/${backendProject}/${stack}`);
 const busArn = backendStackRef.requireOutput("busArn");
 
-// tagAllResources({"project": nameBase});
+tagAllResources({"project": nameBase});
 
 // const frontend = busArn.apply(arn => new Frontend(nameBase, {busArn: arn, appName: appName}));
 const frontend = new Frontend(nameBase, {busArn: busArn, appName: appName});
