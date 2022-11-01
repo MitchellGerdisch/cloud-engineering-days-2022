@@ -1,6 +1,6 @@
 {
     "name": "@pulumi/k8s-servicedeployment",
-    "version": "${VERSION}",
+    "version": "0.0.6",
     "scripts": {
         "build": "tsc"
     },

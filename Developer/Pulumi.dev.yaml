@@ -2,4 +2,3 @@ config:
   aws:region: us-east-2
   ced-developer-demo:dbApplyImmediately: "true"
   ced-developer-demo:dbMultiAz: "false"
-

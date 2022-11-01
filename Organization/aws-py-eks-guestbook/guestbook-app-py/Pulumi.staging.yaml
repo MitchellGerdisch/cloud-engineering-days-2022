@@ -1,2 +1,0 @@
-config:
-  guestbook-app-py:eksProject: guestbook-base-eks-infra-py

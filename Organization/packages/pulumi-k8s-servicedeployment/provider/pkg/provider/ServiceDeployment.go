@@ -43,7 +43,7 @@ func NewServiceDeployment(
 ) (*ServiceDeployment, error) {
 	serviceDeployment := &ServiceDeployment{}
 	err := ctx.RegisterComponentResource(
-		"k8s-servicedeployment:index:ServiceDeployment", // Should match name used in provider.go and schema.yaml
+		"k8s-servicedeployment:index:ServiceDeployment", 
 		name, serviceDeployment, opts...)
 	if err != nil {
 		return nil, err
