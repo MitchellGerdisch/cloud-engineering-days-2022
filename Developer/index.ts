@@ -7,6 +7,7 @@ import { dbUser, dbPassword, dbEngine, dbEngineVersion, dbInstanceClass, dbStora
 // Build a VPC and related accoutrements using Pulumi-provided AWSX package.
 const vpc = new awsx.ec2.Vpc(`${nameBase}-vpc`);
 
+
 // Build RDS Security Group
 const rdsSgName = `${nameBase}-rds-sg`;
 const rdsSecurityGroup = new aws.ec2.SecurityGroup(rdsSgName, {
