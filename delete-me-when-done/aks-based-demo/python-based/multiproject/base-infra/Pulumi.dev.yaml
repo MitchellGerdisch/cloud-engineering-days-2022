@@ -1,4 +1,0 @@
-config:
-  azure-native:location: CentralUS
-  py-azure-aks-cosmosdb-base:password:
-    secure: AAABAD4Z8wXsYElisIrfel8xPd+VHDbu1U2Dyd4Co/5PmxQJ9e9n1zXDc3w=

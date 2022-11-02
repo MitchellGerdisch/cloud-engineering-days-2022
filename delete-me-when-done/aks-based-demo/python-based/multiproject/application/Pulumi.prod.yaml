@@ -1,3 +1,0 @@
-config:
-  py-azure-aks-cosmosdb-app:baseInfraproject: py-azure-aks-cosmosdb-base
-  py-azure-aks-cosmosdb-app:baseName: applprod
